@@ -2,8 +2,8 @@ from src.sensors.futek import IPM650
 import serial.tools.list_ports
 
 def main():
-    # futek_port = r"/dev/tty.usbserial-811647"
-    futek_port = 'COM4'
+    futek_port = r"/dev/tty.usbserial-811647"
+    # futek_port = 'COM4'
 
     loadcell = IPM650(port = futek_port, baudrate = 115200, timeout = 1)
     loadcell.open_connection()

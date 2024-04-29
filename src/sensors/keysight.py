@@ -1,6 +1,5 @@
 import keysight_kt34400 
 import keysight_kt34400.keysight_kt34400
-import pyvisa
 import pandas as pd 
 import numpy as np 
 import keyboard

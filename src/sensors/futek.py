@@ -1,5 +1,7 @@
 import os
+import time
 import serial 
+import threading
 import pandas as pd
 from datetime import datetime
 import serial.tools.list_ports
@@ -22,6 +24,7 @@ class IPM650:
     def close_connection(self):
         if self.conn and self.conn.isOpen():
             self.conn.close()
+            self.conn = None
             # print("Serial Connection Disconnected")
         else:
             print("No Active Serial Connection.")
