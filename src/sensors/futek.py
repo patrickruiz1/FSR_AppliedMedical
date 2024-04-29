@@ -1,13 +1,14 @@
 import os
 import time
 import serial 
+import keyboard
 import threading
 import pandas as pd
 from datetime import datetime
 import serial.tools.list_ports
 
 class IPM650:
-    def __init__(self, port, baudrate = 9600, timeout = 1):
+    def __init__(self, port, baudrate = 9600, timeout = .5):
         self.port = port 
         self.baudrate = baudrate
         self.timeout = timeout
@@ -15,9 +16,20 @@ class IPM650:
         self.data = pd.DataFrame()
 
     def open_connection(self):
+        print("\nFUTEK IPM650 Connection Initilizing ...")
+        time.sleep(3)
         try:
             self.conn = serial.Serial(self.port, self.baudrate, timeout = self.timeout)
-            print("Serial Connection Established")
+            print("\nSerial Connection Established\n")
+
+            print('  vendor: FUTEK')
+            print('  description: IPM650 Python API')
+            print('  model: LSB201 - IPM650')
+            print('  port: ', self.port)
+            print('  baudrate: ', self.baudrate)
+            print('  timeout: ', self.timeout)
+            print(' ')
+
         except serial.SerialException as e:
             print(f"Error: {e}")
 
@@ -64,6 +76,38 @@ class IPM650:
         else:
             new_column_name = len(self.data.columns)
             self.data[new_column_name] = values
+
+    def read_values(self):
+        flag = True
+        if self.conn and self.conn.isOpen():
+            while flag:
+                serial_output = self.conn.readline().decode('utf-8', errors = 'replace').strip()
+                lines = serial_output.split('\n')
+
+                for line in lines:
+                    if "lbs" in line:
+                        parts = line.split()
+                        for i, part in enumerate(parts):
+                            if part == "lbs":
+                                value = abs(float(parts[i - 1]))
+                                print(value)
+                if keyboard.is_pressed('esc'):
+                    flag = False
+
+    def read_singlevalue(self):
+        if self.conn and self.conn.isOpen():
+            serial_output = self.conn.readline().decode('utf-8', errors = 'replace').strip()
+            lines = serial_output.split('\n')
+
+            for line in lines:
+                if "lbs" in line:
+                    parts = line.split()
+                    for i, part in enumerate(parts):
+                        if part == "lbs":
+                            value = abs(float(parts[i - 1]))
+                            print(value)
+                            return(value)
+
 
     def store_data(self, save_data = True):
         if save_data == True:

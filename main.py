@@ -1,21 +1,44 @@
+import os
+import keyboard
+import datetime
 from src.sensors.futek import IPM650
-import serial.tools.list_ports
+from src.sensors.keysight import EDU34450A
 
 def main():
-    futek_port = r"/dev/tty.usbserial-811647"
-    # futek_port = 'COM4'
+    os.system('cls')
 
-    loadcell = IPM650(port = futek_port, baudrate = 115200, timeout = 1)
-    loadcell.open_connection()
-    for i in range(5):
-        loadcell.start_test(5, print_vals = True)
-    # print(loadcell.data)
-    loadcell.close_connection()
-    loadcell.store_data(False)
+    futek_port = 'COM3'
+    LoadCell = IPM650(port=futek_port, baudrate=115200, timeout=1)
+    LoadCell.open_connection()
 
-def test():
-    pass
+    resource_name = 'USB0::0x2A8D::0x8E01::CN62180061::0::INSTR'
+    DMM = EDU34450A(resource_name)
+    DMM.configure_driver()
+
+    datetime_stamp = datetime.datetime.now().strftime('%d%b%y_%H-%M-%S')
+    file_name = f"calibration_data_{datetime_stamp}.csv"
+    file_path = os.path.join(os.getcwd(), 'data', 'calibration', file_name)
+
+    with open(file_path, 'w') as csvfile:
+        csvfile.write("Sensor, Timestamp, Value\n")
+
+        flag = True
+        while flag:
+            timestamp = datetime.datetime.now()
+
+            loadcell_value = LoadCell.read_singlevalue()
+            dmm_value = DMM.read_singlevalue()
+
+            csvfile.write(f"LoadCell, {timestamp}, {loadcell_value}\n")
+            csvfile.write(f"DMM, {timestamp}, {dmm_value}\n")
+
+            if keyboard.is_pressed('space'):
+                flag = False
+
+        csvfile.close()
+
+    LoadCell.close_connection() 
+    # DMM.close_connection()
 
 if __name__ == "__main__":
     main()
-    # test() 
