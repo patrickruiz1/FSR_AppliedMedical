@@ -1,4 +1,5 @@
 import os
+import mouse
 import keyboard
 import datetime
 from src.sensors.futek import IPM650
@@ -31,6 +32,8 @@ def main():
 
             csvfile.write(f"LoadCell, {timestamp}, {loadcell_value}\n")
             csvfile.write(f"DMM, {timestamp}, {dmm_value}\n")
+
+            mouse.click(button=left)
 
             if keyboard.is_pressed('space'):
                 flag = False
