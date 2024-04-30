@@ -2,8 +2,14 @@ import os
 import csv
 import pandas as pd 
 
-FSR_dir = 'FSR_S1'
-file_name = 'FSR_S1_Cond_Raw.csv'
+def retrieve_datapath(FSR_name):
+    data_dir = file_path = os.path.join(os.getcwd(), 'data', FSR_name)
+    
+
+
+
+FSR_dir = 'FSR_01'
+file_name = 'FSR_01_calibration_data_29Apr24_10-48-51.csv'
 file_path = os.path.join(os.getcwd(), 'data', FSR_dir, file_name)
 
 df = pd.read_csv(file_path, index_col = False)
