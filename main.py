@@ -33,7 +33,7 @@ def main():
             csvfile.write(f"LoadCell, {timestamp}, {loadcell_value}\n")
             csvfile.write(f"DMM, {timestamp}, {dmm_value}\n")
 
-            mouse.click(button=left)
+            mouse.click(button='left')
 
             if keyboard.is_pressed('space'):
                 flag = False
