@@ -46,22 +46,24 @@ def test_analysis(FSR_dir, file_name):
     print(data_df)
 
     # This calculates RSME and MAE and adds it to the dictionary
-    # new_data = {}
-    # for i in list(data.keys()):
-    #     actual, experimental = [], []
-    #     for j in data[i]:
-    #         j.append(round(system_function(float(j[0])), 5))
-    #         actual.append(j[1])
-    #         experimental.append(j[2])
+    new_data = {}
+    for i in list(data.keys()):
+        actual, experimental = [], []
+        for j in data[i]:
+            j.append(round(system_function(float(j[0])), 5))
+            actual.append(j[1])
+            experimental.append(j[2])
 
-    #     rsme = round(calculate_rmse(actual, experimental), 5)
-    #     mae = round(calculate_mae(actual, experimental), 5)
-    #     new_data[i] = data[i], rsme, mae
+        rsme = round(calculate_rmse(actual, experimental), 5)
+        mae = round(calculate_mae(actual, experimental), 5)
+        new_data[i] = data[i], rsme, mae
         
-    # print(new_data)
-    # for i in list(new_data.keys()):
-        # print(f'RSME = {new_data[i][1]}, MAE = {new_data[i][2]}')
-        # pass
+    print(new_data)
+    count = 0
+    for i in list(new_data.keys()):
+        print(f'RSME = {new_data[i][1]}, MAE = {new_data[i][2]}')
+        count = count + 1
+    print(count)
 
     # new_df = pd.DataFrame.from_dict(new_data, orient = 'index')
     # print(new_df)
