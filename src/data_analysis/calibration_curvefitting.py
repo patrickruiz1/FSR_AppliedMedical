@@ -99,7 +99,8 @@ def calibration_curvefitting(FSR_dir, file_name, graph_title = 'Graph'):
     # np.set_printoptions(threshold=np.inf)
     print(residuals)
 
-os.system('clear')
+# os.system('clear')
+os.system('cls')
 FSR_dir = 'FSR_S1'
 file_name = 'FSR_S1_Calibration_PostCond_Swag.csv'
 graph_title = 'FSR_S1 - Calibration Curve - Post Conditioning'
