@@ -38,9 +38,19 @@ def process_data(FSR, file_name):
             new_dict[i] = value
     
     new_df = pd.DataFrame(list(new_dict.values()), columns = ['Load (lbf)', 'Resistance (Ohms)'])
-    new_df.to_csv(save_path)
+    new_df.to_csv(save_path, index = False)
 
 os.system('clear')
-FSR = 'FSR_S1'
-file_name = 'FSR_S1_Calibration_PostStability' + '.csv'
-process_data(FSR, file_name)
+FSR_dir = 'FSR_S1'
+
+# Process one file at a time
+# file_name = 'FSR_S1_Calibration_PostStability' + '.csv'
+# process_data(FSR, file_name)
+
+# Process multiple files at once
+file_path = os.path.join(os.getcwd(), 'data', FSR_dir, 'raw')
+files = os.listdir(file_path)
+sorted_files_list = sorted(files)
+
+for file in sorted_files_list[4:]:
+    process_data(FSR_dir, file)

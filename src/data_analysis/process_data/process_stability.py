@@ -1,36 +1,19 @@
 import os 
 import numpy as np
 import pandas as pd 
+import matplotlib.pyplot as plt 
+from scipy.optimize import curve_fit
 
-def system_function(x, a = 12964.65477, b = -0.90492):
-    return a * np.power(x, b)
+def process_stability(FSR_dir, file_name, ref_force):
+    file_path = os.path.join(os.getcwd(), 'data', FSR_dir, 'processed', file_name)
+    save_path = os.path.join(os.getcwd(), 'data', FSR_dir, 'stability', file_name)
 
-def relative_error(actual, experimental):
-    return (abs(actual - experimental)/actual)*100
-
-def calculate_rmse(actual_values, estimated_values):
-    act, exp = np.array(actual_values), np.array(estimated_values)
-    squared_errors = (act - exp) ** 2
-    rmse = np.sqrt(np.mean(squared_errors))
-    return rmse
-
-def calculate_mae(actual_values, estimated_values):
-    act, exp = np.array(actual_values), np.array(estimated_values)
-    absolute_errors = np.abs(act - exp)
-    mae = np.mean(absolute_errors)
-    return mae
-
-def test_analysis(FSR_dir, file_name):
-    file_path = os.path.join(os.getcwd(), 'data', FSR_dir, 'pre-processed', file_name)
-    save_path = os.path.join(os.getcwd(), 'data', FSR_dir, 'test', file_name)
-
-    df = pd.read_csv(file_path, index_col = False)
+    df = pd.read_csv(file_path, index_col = None)
 
     data = {}
-
     flag, new_data, counter = False, [], 0
     for index, row in df.iterrows():
-        if row.iloc[0] > 5:
+        if row.iloc[0] > ref_force:
             flag = True
             new_data.append([float(row.iloc[0]), float(row.iloc[1])])
         else:
@@ -42,38 +25,38 @@ def test_analysis(FSR_dir, file_name):
             else:
                 pass
     
-    data_df = pd.DataFrame.from_dict(data, orient = 'index')
-    print(data_df)
-
-    # This calculates RSME and MAE and adds it to the dictionary
     new_data = {}
     for i in list(data.keys()):
-        actual, experimental = [], []
-        for j in data[i]:
-            j.append(round(system_function(float(j[0])), 5))
-            actual.append(j[1])
-            experimental.append(j[2])
+        if len(data[i]) == 1:
+            new_data[i] = data[i]
+        else:
+            curr, diff, val = 0, 100, 0
+            for j in data[i]:
+                diff = ref_force - j[0]
+                if diff < curr:
+                    curr = diff
+                    diff = 0
+                    val = j
+                else:
+                    pass
+            new_data[i] = val
 
-        rsme = round(calculate_rmse(actual, experimental), 5)
-        mae = round(calculate_mae(actual, experimental), 5)
-        new_data[i] = data[i], rsme, mae
-        
-    print(new_data)
-    count = 0
-    for i in list(new_data.keys()):
-        print(f'RSME = {new_data[i][1]}, MAE = {new_data[i][2]}')
-        count = count + 1
-    print(count)
+    data_df = pd.DataFrame.from_dict(new_data, orient = 'index', columns = ['Force (lbf)', 'Resistance (Ohms)'])
+    data_df.to_csv(save_path, index = False)
 
-    # new_df = pd.DataFrame.from_dict(new_data, orient = 'index')
-    # print(new_df)
+os.system('clear')
+# os.system('cls')
+FSR_dir = 'FSR_S1'
 
+# Process one file at a time
+# file_name = 'FSR_S1_Calibration(7.0lbf)' + '.csv'
+# process_stability(FSR_dir, file_name, 1)
 
-            
+# Process multiple files at once
+file_path = os.path.join(os.getcwd(), 'data', FSR_dir, 'processed')
+files = os.listdir(file_path)
+sorted_files_list = sorted(files)
 
+for file in sorted_files_list[1:]:
+    process_stability(FSR_dir, file, 1.3)
 
-
-os.system('cls')
-FSR_dir = 'FSR_S1 (OLD)'
-file_name = 'FSR_S1_Stability_JFF_FastLoading' + '.csv'
-test_analysis(FSR_dir, file_name)

@@ -18,7 +18,7 @@ def main(FSR_dir):
 
     datetime_stamp = datetime.datetime.now().strftime('%d%b%y_%H-%M-%S')
     file_name = f"calibration_data_{datetime_stamp}.csv"
-    file_path = os.path.join(os.getcwd(), 'data', FSR_dir 'raw', file_name)
+    file_path = os.path.join(os.getcwd(), 'data', FSR_dir, 'raw', file_name)
 
     with open(file_path, 'w') as csvfile:
         csvfile.write("Sensor, Timestamp, Value\n")
@@ -45,5 +45,4 @@ def main(FSR_dir):
 
 if __name__ == "__main__":
     FSR_dir = 'FSR_S1'
-
     main(FSR_dir)
