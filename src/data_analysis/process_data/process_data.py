@@ -42,5 +42,5 @@ def process_data(FSR, file_name):
 
 os.system('clear')
 FSR = 'FSR_S1'
-file_name = 'FSR_S1_Calibration(9.0lbf)' + '.csv'
+file_name = 'FSR_S1_Calibration(7.0lbf)' + '.csv'
 process_data(FSR, file_name)

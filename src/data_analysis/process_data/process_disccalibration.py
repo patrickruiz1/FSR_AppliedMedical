@@ -47,5 +47,5 @@ def calibration_discrete_curvefitting(FSR_dir, file_name, ref_force):
 os.system('clear')
 # os.system('cls')
 FSR_dir = 'FSR_S1'
-file_name = 'FSR_S1_Calibration(9.0lbf)' + '.csv'
-calibration_discrete_curvefitting(FSR_dir, file_name, 9.0)
+file_name = 'FSR_S1_Calibration(7.0lbf)' + '.csv'
+calibration_discrete_curvefitting(FSR_dir, file_name, 1)
