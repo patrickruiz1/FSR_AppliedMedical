@@ -5,7 +5,7 @@ import datetime
 from src.sensors.futek import IPM650
 from src.sensors.keysight import EDU34450A
 
-def main():
+def main(FSR_dir):
     os.system('cls')
 
     futek_port = 'COM3'
@@ -18,7 +18,7 @@ def main():
 
     datetime_stamp = datetime.datetime.now().strftime('%d%b%y_%H-%M-%S')
     file_name = f"calibration_data_{datetime_stamp}.csv"
-    file_path = os.path.join(os.getcwd(), 'data', 'calibration', file_name)
+    file_path = os.path.join(os.getcwd(), 'data', FSR_dir 'raw', file_name)
 
     with open(file_path, 'w') as csvfile:
         csvfile.write("Sensor, Timestamp, Value\n")
@@ -35,7 +35,7 @@ def main():
 
             mouse.click(button='left')
 
-            if keyboard.is_pressed('space'):
+            if keyboard.is_pressed('p'):
                 flag = False
 
         csvfile.close()
@@ -44,4 +44,6 @@ def main():
     # DMM.close_connection()
 
 if __name__ == "__main__":
-    main()
+    FSR_dir = 'FSR_S1'
+
+    main(FSR_dir)
