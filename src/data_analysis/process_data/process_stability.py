@@ -74,6 +74,6 @@ def test_analysis(FSR_dir, file_name):
 
 
 os.system('cls')
-FSR_dir = 'FSR_S1'
+FSR_dir = 'FSR_S1 (OLD)'
 file_name = 'FSR_S1_Stability_JFF_FastLoading' + '.csv'
 test_analysis(FSR_dir, file_name)

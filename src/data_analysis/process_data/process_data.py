@@ -40,7 +40,7 @@ def process_data(FSR, file_name):
     new_df = pd.DataFrame(list(new_dict.values()), columns = ['Load (lbf)', 'Resistance (Ohms)'])
     new_df.to_csv(save_path)
 
-os.system('cls')
+os.system('clear')
 FSR = 'FSR_S1'
-file_name = 'FSR_S1_Stability_JFF_SlowLoading' + '.csv'
+file_name = 'FSR_S1_Calibration(5.0lbf)' + '.csv'
 process_data(FSR, file_name)
